@@ -27,7 +27,7 @@ router.post("/webhook", async ({request,response}) => {
                 "elements": [
                     {
                         "type": "mrkdwn",
-                        "text": `*Tipo*: ${payload.Status}`
+                        "text": `*Status*: ${payload.Status}`
                     }
                 ]
             }
