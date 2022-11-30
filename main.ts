@@ -9,6 +9,13 @@ const router = new Router();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
+router.get("/webhook-vitale-residence", async ({request,response}) => {    
+
+    console.log(request)
+
+    response.status = 200
+});
+
 router.post("/webhook", async ({request,response}) => {    
 
     const payload: WebrookMovidesk = await request.body({type:'json'}).value 
