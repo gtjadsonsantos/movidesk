@@ -9,9 +9,16 @@ const router = new Router();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-router.get("/webhook-vitale-residence", ({request,response}) => {    
+router.get("/webhook-vitale-residence", async ({request,response}) => {    
 
-    console.log(request)
+    const url =  request.url.toJSON()
+    const headers =  request.headers.keys()
+    const payload =  await request.body().value
+    console.log(url)
+    console.log(headers)
+    console.log(payload)
+
+
 
     response.status = 200
 });
