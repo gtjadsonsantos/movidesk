@@ -12,11 +12,11 @@ app.use(router.allowedMethods());
 router.post("/webhook-vitale-residence", async ({request,response}) => {    
 
     const url =  request.url.toJSON()
-    const headers =  request.headers.keys()
+    const authorization =  request.headers.get("Authorization")
     const payload =  await request.body({type: "json"}).value
 
     console.log(url)
-    console.log(headers)
+    console.log(authorization)
     console.log(payload)
 
     response.status = 200
