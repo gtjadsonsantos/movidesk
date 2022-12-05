@@ -46,7 +46,7 @@ async function sendResquestSmarthomeCustomer(url:string, token:string, payload:s
       Authorization: `Bearer ${token}`,
       Accept: "application/json",
     };
-    const { data } = await axiod.post(`${url}/api/alexa/smart_home`, payload, {
+    const { data } = await axiod.post(`${url}/api/google_assistant`, payload, {
       timeout: 1000,
       headers,
     });
