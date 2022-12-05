@@ -9,17 +9,60 @@ const router = new Router();
 app.use(router.routes());
 app.use(router.allowedMethods());
 
+
+async function getProfileFromVault(token:string) {
+    const { data } = await axiod.get("https://vault.unisec.com.br/v1/identity/oidc/provider/default/userinfo", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    });
+    return {email: data.contact.email, id: data.id }
+  }
+
+async function getUserFromVault(email:string) {
+try {
+    const { data } = await axiod.get(
+    `https://vault.unisec.com.br/v1/smarthome/data/${email}`,
+    {
+        headers: {
+        'X-Vault-Token': Deno.env.get("VAULT_TOKEN"),
+        'Content-Type': 'application/json'
+        }
+    }
+    );
+
+    return {
+    url: data.data.data.url,
+    token: data.data.data.token,
+    };
+} catch (error:any) {
+    console.log(`O E-mail ${email} não foi encontrado na base de dados`);
+}
+}
+
+async function sendResquestSmarthomeCustomer(url:string, token:string, payload:string) {
+    const headers = {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    };
+    const { data } = await axiod.post(`${url}/api/alexa/smart_home`, payload, {
+      timeout: 1000,
+      headers,
+    });
+    return data;
+  }
+  
+
+
 router.post("/webhook-vitale-residence", async ({request,response}) => {    
 
-    const url =  request.url.toJSON()
-    const authorization =  request.headers.get("Authorization")
+    const authorization =  request.headers.get("Authorization") as string
+    const { email } = await getProfileFromVault(authorization)
     const payload =  await request.body({type: "json"}).value
+    const {url,token} = await getUserFromVault(email) as {url:string, token: string}
 
-    console.log(url)
-    console.log(authorization)
-    console.log(payload)
-
-    response.status = 200
+    return response.body = await sendResquestSmarthomeCustomer(url,token,payload)
 });
 
 router.post("/webhook", async ({request,response}) => {    
