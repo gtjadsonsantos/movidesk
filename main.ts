@@ -58,10 +58,13 @@ async function sendResquestSmarthomeCustomer(url:string, token:string, payload:s
 router.post("/webhook-vitale-residence", async ({request,response}) => {    
 
     const authorization =  request.headers.get("Authorization") as string
+    const payload =  await request.body({type: "json"}).value as any
+    
     const { email } = await getProfileFromVault(authorization)
-    const payload =  await request.body({type: "json"}).value
+    console.log(email)
     const {url,token} = await getUserFromVault(email) as {url:string, token: string}
-
+    console.log(url,token)
+    console.log(payload)
     return response.body = await sendResquestSmarthomeCustomer(url,token,payload)
 });
 
