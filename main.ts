@@ -13,7 +13,7 @@ app.use(router.allowedMethods());
 async function getProfileFromVault(token:string) {
     const { data } = await axiod.get("https://vault.unisec.com.br/v1/identity/oidc/provider/default/userinfo", {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `${token}`,
         Accept: "application/json",
       },
     });
