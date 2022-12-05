@@ -13,7 +13,8 @@ router.post("/webhook-vitale-residence", async ({request,response}) => {
 
     const url =  request.url.toJSON()
     const headers =  request.headers.keys()
-    const payload =  await request.body().value
+    const payload =  await request.body({type: "json"}).value
+
     console.log(url)
     console.log(headers)
     console.log(payload)
